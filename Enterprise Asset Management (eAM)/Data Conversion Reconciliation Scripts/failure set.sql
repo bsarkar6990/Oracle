@@ -1,0 +1,6 @@
+select efs.set_name ,efs.DESCRIPTION,
+rfs.FAILURE_SET_NAME, rfs.DESCRIPTION L_DESCRIPTION
+from EAM_FAILURE_SETS efs,
+RD_FAILURE_SETS@PDSEBS2DPPRD rfs
+where efs.set_name in (select FAILURE_SET_NAME from RD_FAILURE_SETS@PDSEBS2DPPRD)
+and efs.set_name = rfs.FAILURE_SET_NAME;
