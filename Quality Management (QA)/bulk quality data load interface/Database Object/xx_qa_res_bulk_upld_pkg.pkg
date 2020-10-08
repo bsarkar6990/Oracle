@@ -1,0 +1,225 @@
+create or replace PACKAGE XX_QA_RES_BULK_UPLD_PKG IS
+  PROCEDURE BULK_UPLOAD_MAIN(
+                              errbuf OUT VARCHAR2
+                              ,retcode OUT NUMBER
+                              ,P_FILE_ID IN NUMBER);
+                              
+  FUNCTION blob_to_clob (blob_in IN BLOB)
+    RETURN CLOB;
+END XX_QA_RES_BULK_UPLD_PKG;
+/
+
+create or replace PACKAGE BODY XX_QA_RES_BULK_UPLD_PKG IS
+  PROCEDURE BULK_UPLOAD_MAIN(
+                              errbuf OUT VARCHAR2
+                              ,retcode OUT NUMBER
+                              ,P_FILE_ID IN NUMBER) IS
+    CURSOR CUR_GET_LINES IS
+      SELECT  replace(REGEXP_SUBSTR (A1.ASTR,'[^'||CHR(10)||']+',1,LEVEL),CHR(13),'') LINE
+        FROM  (SELECT APPS.XX_QA_RES_BULK_UPLD_PKG.BLOB_TO_CLOB(A2.FILE_DATA) ASTR
+                FROM APPS.XXCUST_FND_BLOB_DATA A2
+                WHERE A2.FILE_ID=P_FILE_ID
+              ) A1
+      CONNECT BY LEVEL<=LENGTH(A1.ASTR)-LENGTH(REPLACE(A1.ASTR,CHR(10)))+1;
+  
+    CURSOR CUR_GET_FIELDS(P_LINE CLOB) IS
+      SELECT TRIM(TRAILING '~' FROM TRIM(TRAILING '$' FROM REGEXP_SUBSTR (A1.ASTR,'[^,]+',1,LEVEL))) FIELD_ELEM
+        FROM  (SELECT REPLACE(P_LINE||',',',','~$,') ASTR FROM SYS.DUAL A2) A1
+      CONNECT BY LEVEL<=LENGTH(A1.ASTR)-LENGTH(REPLACE(A1.ASTR,','))+1;
+  
+    l_get_qa_plan_flag Number:=0;
+    l_skip_first_line_flag Number:=0;
+    l_get_org_code_flag  NUMBER:=0;
+    l_org_code           MTL_PARAMETERS.ORGANIZATION_CODE%TYPE;
+    l_org_id              NUMBER;
+    l_qa_plan_name         QA_PLANS.NAME%TYPE;
+    l_qa_plan_id           NUMBER;
+    l_plan_import_view    QA_PLANS.IMPORT_VIEW_NAME%TYPE;
+    l_inst_statement      CLOB;
+    l_inst_STATEMENT1      CLOB;
+    l_inst_val_statement  CLOB;
+    l_qa_elem_seq_max     NUMBER;
+    l_qa_elem_seq         NUMBER;
+    l_qa_elem_cnt         NUMBER;
+    l_validate_header     NUMBER;
+    l_qa_elem_no          NUMBER;
+    l_import_view_col     ALL_TAB_COLUMNS.COLUMN_NAME%TYPE;
+    l_trans_int_id        NUMBER;
+    l_request_id          NUMBER;
+    l_dev_status          VARCHAR2(1000);
+    l_conc_err_message    VARCHAR2(4000);
+    l_request_status      BOOLEAN;
+    l_phase               VARCHAR2(1000);
+    l_status              VARCHAR2(1000);
+    l_dev_phase           VARCHAR2(1000);
+    l_errbuf              VARCHAR2(4000);
+  BEGIN
+    
+    l_skip_first_line_flag:=0;
+    l_validate_header:=0;
+   
+    FOR L_GET_LINES IN CUR_GET_LINES LOOP
+        IF l_skip_first_line_flag=0 THEN
+          l_skip_first_line_flag:=1;
+          CONTINUE;
+        END IF;
+        l_get_qa_plan_flag:=0;
+        l_get_org_code_flag:=0;
+        l_qa_elem_cnt:=0;
+        l_inst_statement:='INSERT INTO ';
+        l_inst_val_statement:=' VALUES( ';
+        
+        
+        FOR L_GET_FIELDS IN CUR_GET_FIELDS(L_GET_LINES.LINE) LOOP
+          IF l_get_qa_plan_flag=0 THEN
+            l_qa_plan_name:=L_GET_FIELDS.FIELD_ELEM;
+            l_get_qa_plan_flag:=1;
+            CONTINUE;
+          ELSIF l_get_qa_plan_flag=1 AND l_get_org_code_flag=0 THEN
+            l_org_code:=L_GET_FIELDS.FIELD_ELEM;
+            l_get_qa_plan_flag:=2;
+            l_get_org_code_flag:=1;
+            BEGIN
+              SELECT QP.PLAN_ID,QP.ORGANIZATION_ID,IMPORT_VIEW_NAME
+                INTO   l_qa_plan_id,l_org_id,l_plan_import_view
+                FROM   QA_PLANS QP, MTL_PARAMETERS MP
+               WHERE   QP.ORGANIZATION_ID=MP.ORGANIZATION_ID
+                AND    QP.NAME=trim(l_qa_plan_name)
+                AND    MP.ORGANIZATION_CODE=trim(l_org_code);
+            EXCEPTION
+              WHEN OTHERS THEN
+                l_qa_plan_id:=NULL;
+                FND_FILE.PUT_LINE(FND_FILE.LOG,'PLAN NAME NOT FOUND!');
+            END;
+            
+            IF l_qa_plan_id IS NOT NULL THEN
+            
+              l_inst_statement:=l_inst_statement||l_plan_import_view||' ( TRANSACTION_INTERFACE_ID,
+                                                                          QA_LAST_UPDATED_BY_NAME,
+                                                                          QA_CREATED_BY_NAME,
+                                                                          COLLECTION_ID,
+                                                                          SOURCE_CODE,
+                                                                          SOURCE_LINE_ID,
+                                                                          PROCESS_STATUS,
+                                                                          ORGANIZATION_CODE,
+                                                                          OPERATING_UNIT_ID,
+                                                                          OPERATING_UNIT,
+                                                                          PLAN_NAME,
+                                                                          INSERT_TYPE,
+                                                                          MATCHING_ELEMENTS,
+                                                                          SPEC_NAME,';
+              SELECT qa.qa_txn_interface_s.NEXTVAL INTO l_trans_int_id FROM dual;
+              
+              l_inst_val_statement:=l_inst_val_statement||l_trans_int_id||',
+                                                            '||''''''||',
+                                                            '||''''''||',
+                                                            '||''''''||',
+                                                            '||''''''||',
+                                                            '||''''''||',
+                                                            1,
+                                                            '''||l_org_code||''',
+                                                            '||''''''||',
+                                                            '||''''''||',
+                                                            '''||l_qa_plan_name||''',
+                                                            1,
+                                                            '||''''''||',
+                                                            '||''''''||',';                                                      
+              BEGIN
+                SELECT MAX(PROMPT_SEQUENCE),COUNT(1)
+                  INTO l_qa_elem_seq_max,l_qa_elem_cnt  
+                  FROM QA_PLAN_CHARS
+                 WHERE PLAN_ID=l_qa_plan_id;
+              EXCEPTION
+                WHEN OTHERS THEN
+                  l_qa_elem_seq_max:=NULL;
+                  l_qa_elem_cnt:=NULL;
+                  FND_FILE.PUT_LINE(FND_FILE.LOG,'ELEMENTS NOT FOUND FOR QUALITY PLAN');
+                  EXIT;
+              END;
+              l_qa_elem_no:=15;
+            END IF;
+            CONTINUE;
+          END IF;
+          BEGIN
+            SELECT COLUMN_NAME
+             INTO  l_import_view_col
+             FROM   ALL_TAB_COLUMNS
+             WHERE  TABLE_NAME=l_plan_import_view
+              AND   owner='APPS'
+              AND   COLUMN_ID=l_qa_elem_no;
+          EXCEPTION
+            WHEN OTHERS THEN
+              l_import_view_col:=NULL;
+              FND_FILE.PUT_LINE(FND_FILE.LOG,'ELEMENT NOT FOUND FOR QUALITY PLAN ');
+          END;
+          IF l_qa_elem_no<l_qa_elem_cnt+15 THEN
+            l_inst_statement:=l_inst_statement||l_import_view_col;
+            IF length(TRIM(L_GET_FIELDS.FIELD_ELEM))>0 THEN
+              l_inst_val_statement:=l_inst_val_statement||''''||REPLACE(TRIM(L_GET_FIELDS.FIELD_ELEM),CHR(13),'')||'''';
+            ELSE
+              l_inst_val_statement:=l_inst_val_statement||'''''';
+            END IF;
+            IF l_qa_elem_no<l_qa_elem_cnt+14 THEN
+              l_inst_statement:=l_inst_statement||',';
+              l_inst_val_statement:=l_inst_val_statement||',';
+            END IF;
+          END IF;
+          l_qa_elem_no:=l_qa_elem_no+1;
+          
+        END LOOP;
+        IF l_qa_plan_id IS NOT NULL THEN
+          l_inst_statement:=l_inst_statement||')';
+          l_inst_val_statement:=l_inst_val_statement||')';
+          FND_FILE.PUT_LINE(FND_FILE.LOG,l_inst_STATEMENT);
+          FND_FILE.PUT_LINE(FND_FILE.LOG,l_inst_val_statement);
+          EXECUTE IMMEDIATE l_inst_statement||' '||l_inst_val_statement;
+        END IF;
+    END LOOP;
+    COMMIT;
+    -------------------------------------------------------
+    
+    l_request_id:=Fnd_Request.submit_request('QA',
+                                                  'QLTTRAMB',
+                                                  'Collection Import Manager',
+                                                   TO_CHAR(SYSDATE,'DD-MON-YY HH24:MI:SS'),
+                                                   FALSE,
+                                                   100,
+                                                   '1',
+                                                   fnd_global.user_id,
+                                                   NULL
+                                                   );
+     UPDATE XXCUST_FND_BLOB_DATA
+     SET  REQUEST_ID=l_request_id
+     WHERE FILE_ID=P_FILE_ID;
+     COMMIT;
+     l_request_status:= Fnd_Concurrent.wait_for_request(l_request_id,
+                                                        10,
+                                                        0,
+                                                        l_phase,
+                                                        l_status,
+                                                        l_dev_phase,
+                                                        l_dev_status,
+                                                        l_conc_err_message);
+  END BULK_UPLOAD_MAIN;
+  
+  FUNCTION blob_to_clob (blob_in IN BLOB)
+    RETURN CLOB
+  AS
+  v_clob CLOB;
+  v_varchar VARCHAR2(32767);
+  v_start PLS_INTEGER := 1;
+  v_buffer PLS_INTEGER := 32767;
+  BEGIN
+  DBMS_LOB.CREATETEMPORARY(v_clob, TRUE);
+
+    FOR i IN 1..CEIL(DBMS_LOB.GETLENGTH(blob_in) / v_buffer)
+    LOOP
+
+       v_varchar := UTL_RAW.CAST_TO_VARCHAR2(DBMS_LOB.SUBSTR(blob_in, v_buffer, v_start));
+
+      DBMS_LOB.WRITEAPPEND(v_clob, LENGTH(v_varchar), v_varchar);
+      v_start := v_start + v_buffer;
+    END LOOP;
+  RETURN v_clob;
+  END blob_to_clob;
+END XX_QA_RES_BULK_UPLD_PKG;
