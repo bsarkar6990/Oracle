@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+
+<AppModule
+   Name="QA_RST_BLK_UPD_AM"
+   ComponentClass="xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_AMImpl" >
+   <DesignTime>
+      <Attr Name="_isCodegen" Value="true" />
+      <Attr Name="_version" Value="10.1.3.43.6" />
+      <Attr Name="_deployType" Value="0" />
+   </DesignTime>
+   <ViewUsage
+      Name="QA_RST_BLK_UPD_VO1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_VO" >
+   </ViewUsage>
+   <ViewUsage
+      Name="XX_FND_BULK_DATA_VO1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_VO" >
+   </ViewUsage>
+   <ViewUsage
+      Name="XX_FND_BULK_DATA_S_VO1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_S_VO" >
+   </ViewUsage>
+   <ViewUsage
+      Name="XXCUST_GET_QA_IV_VO1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.XXCUST_GET_QA_IV_VO" >
+   </ViewUsage>
+   <ViewUsage
+      Name="xxcust_get_iv_col_vo1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.xxcust_get_iv_col_vo" >
+   </ViewUsage>
+   <ViewUsage
+      Name="XX_WRKR_STATUS_VO1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.XX_WRKR_STATUS_VO" >
+   </ViewUsage>
+   <ViewUsage
+      Name="XX_GET_IMPORT_WORKER_VO1"
+      ViewObjectName="xxx.oracle.apps.qa.results.bulkenter.server.XX_GET_IMPORT_WORKER_VO" >
+   </ViewUsage>
+</AppModule>

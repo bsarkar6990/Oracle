@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<!DOCTYPE Entity SYSTEM "jbo_03_01.dtd">
+
+<Entity
+   Name="XX_FND_BULK_DATA_EO"
+   DBObjectType="table"
+   DBObjectName="XXCUST_FND_BLOB_DATA"
+   AliasName="XX_FND_BULK_DATA_EO"
+   BindingStyle="JDBC"
+   UseGlueCode="false"
+   RowClass="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EOImpl"
+   DefClass="oracle.apps.fnd.framework.server.OAEntityDefImpl"
+   CollClass="oracle.apps.fnd.framework.server.OAEntityCache" >
+   <DesignTime>
+      <Attr Name="_isCodegen" Value="true" />
+      <Attr Name="_version" Value="10.1.3.43.6" />
+      <AttrArray Name="_publishEvents">
+      </AttrArray>
+      <Attr Name="_codeGenFlag2" Value="Init|Access|Val" />
+   </DesignTime>
+   <Attribute
+      Name="RowID"
+      IsUpdateable="false"
+      ColumnName="ROWID"
+      Type="oracle.jbo.domain.RowID"
+      ColumnType="ROWID"
+      SQLType="ROWID"
+      TableName="XXCUST_FND_BLOB_DATA"
+      PrimaryKey="true" >
+   </Attribute>
+   <Attribute
+      Name="FileId"
+      ColumnName="FILE_ID"
+      Type="oracle.jbo.domain.Number"
+      ColumnType="NUMBER"
+      SQLType="NUMERIC"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="22" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="FileName"
+      Precision="256"
+      ColumnName="FILE_NAME"
+      Type="java.lang.String"
+      ColumnType="VARCHAR2"
+      SQLType="VARCHAR"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="256" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="FileData"
+      IsQueriable="false"
+      ColumnName="FILE_DATA"
+      Type="oracle.jbo.domain.BlobDomain"
+      ColumnType="BLOB"
+      SQLType="BLOB"
+      TableName="XXCUST_FND_BLOB_DATA" >
+   </Attribute>
+   <Attribute
+      Name="FileContentType"
+      Precision="256"
+      ColumnName="FILE_CONTENT_TYPE"
+      Type="java.lang.String"
+      ColumnType="VARCHAR2"
+      SQLType="VARCHAR"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="256" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="FileFormat"
+      Precision="10"
+      ColumnName="FILE_FORMAT"
+      Type="java.lang.String"
+      ColumnType="VARCHAR2"
+      SQLType="VARCHAR"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="10" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="CreatedBy"
+      IsNotNull="true"
+      ColumnName="CREATED_BY"
+      Type="oracle.jbo.domain.Number"
+      ColumnType="NUMBER"
+      SQLType="NUMERIC"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="22" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="CreationDate"
+      IsNotNull="true"
+      ColumnName="CREATION_DATE"
+      Type="oracle.jbo.domain.Date"
+      ColumnType="DATE"
+      SQLType="TIMESTAMP"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="7" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="LastUpdatedBy"
+      IsNotNull="true"
+      ColumnName="LAST_UPDATED_BY"
+      Type="oracle.jbo.domain.Number"
+      ColumnType="NUMBER"
+      SQLType="NUMERIC"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="22" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="LastUpdateDate"
+      IsNotNull="true"
+      ColumnName="LAST_UPDATE_DATE"
+      Type="oracle.jbo.domain.Date"
+      ColumnType="DATE"
+      SQLType="TIMESTAMP"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="7" />
+      </DesignTime>
+   </Attribute>
+   <Attribute
+      Name="LastUpdateLogin"
+      ColumnName="LAST_UPDATE_LOGIN"
+      Type="oracle.jbo.domain.Number"
+      ColumnType="NUMBER"
+      SQLType="NUMERIC"
+      TableName="XXCUST_FND_BLOB_DATA" >
+      <DesignTime>
+         <Attr Name="_DisplaySize" Value="22" />
+      </DesignTime>
+   </Attribute>
+   <Key
+      Name="SysC00388035" >
+      <AttrArray Name="Attributes">
+         <Item Value="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EO.LastUpdateDate" />
+      </AttrArray>
+      <DesignTime>
+         <Attr Name="_checkCondition" Value="&#34;LAST_UPDATE_DATE&#34; IS NOT NULL" />
+         <Attr Name="_isCheck" Value="true" />
+         <Attr Name="_DBObjectName" Value="SYS_C00388035" />
+      </DesignTime>
+   </Key>
+   <Key
+      Name="SysC00388036" >
+      <AttrArray Name="Attributes">
+         <Item Value="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EO.LastUpdatedBy" />
+      </AttrArray>
+      <DesignTime>
+         <Attr Name="_checkCondition" Value="&#34;LAST_UPDATED_BY&#34; IS NOT NULL" />
+         <Attr Name="_isCheck" Value="true" />
+         <Attr Name="_DBObjectName" Value="SYS_C00388036" />
+      </DesignTime>
+   </Key>
+   <Key
+      Name="SysC00388037" >
+      <AttrArray Name="Attributes">
+         <Item Value="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EO.CreationDate" />
+      </AttrArray>
+      <DesignTime>
+         <Attr Name="_checkCondition" Value="&#34;CREATION_DATE&#34; IS NOT NULL" />
+         <Attr Name="_isCheck" Value="true" />
+         <Attr Name="_DBObjectName" Value="SYS_C00388037" />
+      </DesignTime>
+   </Key>
+   <Key
+      Name="SysC00388038" >
+      <AttrArray Name="Attributes">
+         <Item Value="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EO.CreatedBy" />
+      </AttrArray>
+      <DesignTime>
+         <Attr Name="_checkCondition" Value="&#34;CREATED_BY&#34; IS NOT NULL" />
+         <Attr Name="_isCheck" Value="true" />
+         <Attr Name="_DBObjectName" Value="SYS_C00388038" />
+      </DesignTime>
+   </Key>
+   <Key
+      Name="XxFndBulkDataEoPrimaryKey" >
+      <AttrArray Name="Attributes">
+         <Item Value="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EO.RowID" />
+      </AttrArray>
+      <DesignTime>
+         <Attr Name="_isPrimary" Value="true" />
+         <Attr Name="_DBObjectName" Value="XX_FND_BULK_DATA_EO_PRIMARY_KE" />
+      </DesignTime>
+   </Key>
+</Entity>

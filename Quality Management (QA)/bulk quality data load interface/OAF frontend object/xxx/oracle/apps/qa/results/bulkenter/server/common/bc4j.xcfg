@@ -1,0 +1,12 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BC4JConfig>
+   <AppModuleConfigBag>
+      <AppModuleConfig name="QA_RST_BLK_UPD_AMLocal">
+         <DeployPlatform>LOCAL</DeployPlatform>
+         <jbo.project>OAQABulkUPDPR</jbo.project>
+         <AppModuleJndiName>xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_AM</AppModuleJndiName>
+         <java.naming.factory.initial>oracle.jbo.common.JboInitialContextFactory</java.naming.factory.initial>
+         <ApplicationName>xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_AM</ApplicationName>
+      </AppModuleConfig>
+   </AppModuleConfigBag>
+</BC4JConfig>

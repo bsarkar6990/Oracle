@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<!DOCTYPE JboPackage SYSTEM "jbo_03_01.dtd">
+
+<JboPackage
+   Name="server"
+   SeparateXMLFiles="true"
+   PackageName="xxx.oracle.apps.qa.results.bulkenter.server" >
+   <DesignTime>
+      <Attr Name="_ejbPackage" Value="false" />
+      <Attr Name="_version" Value="10.1.3.43.6" />
+   </DesignTime>
+   <Containee
+      Name="QA_RST_BLK_UPD_AM"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_AM"
+      ObjectType="AppModule" >
+   </Containee>
+   <Containee
+      Name="QA_RST_BLK_UPD_VO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_VO"
+      ObjectType="ViewObject" >
+   </Containee>
+   <Containee
+      Name="XX_FND_BULK_DATA_EO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_EO"
+      ObjectType="Entity" >
+   </Containee>
+   <Containee
+      Name="XX_FND_BULK_DATA_S_VO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_S_VO"
+      ObjectType="ViewObject" >
+   </Containee>
+   <Containee
+      Name="XX_FND_BULK_DATA_VO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.XX_FND_BULK_DATA_VO"
+      ObjectType="ViewObject" >
+   </Containee>
+   <Containee
+      Name="XX_GET_IMPORT_WORKER_VO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.XX_GET_IMPORT_WORKER_VO"
+      ObjectType="ViewObject" >
+   </Containee>
+   <Containee
+      Name="XX_WRKR_STATUS_VO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.XX_WRKR_STATUS_VO"
+      ObjectType="ViewObject" >
+   </Containee>
+   <Containee
+      Name="xxcust_get_iv_col_vo"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.xxcust_get_iv_col_vo"
+      ObjectType="ViewObject" >
+   </Containee>
+   <Containee
+      Name="XXCUST_GET_QA_IV_VO"
+      FullName="xxx.oracle.apps.qa.results.bulkenter.server.XXCUST_GET_QA_IV_VO"
+      ObjectType="ViewObject" >
+   </Containee>
+</JboPackage>

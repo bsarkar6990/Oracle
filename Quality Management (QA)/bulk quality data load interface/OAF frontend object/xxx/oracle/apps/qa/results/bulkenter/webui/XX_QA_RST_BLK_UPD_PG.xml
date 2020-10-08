@@ -1,0 +1,64 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<page xmlns:jrad="http://xmlns.oracle.com/jrad" xmlns:oa="http://xmlns.oracle.com/oa" xmlns:ui="http://xmlns.oracle.com/uix/ui" version="10.1.3_" xml:lang="en-US" xmlns:user="http://xmlns.oracle.com/jrad/user" xmlns="http://xmlns.oracle.com/jrad" file-version="$Header$">
+   <content>
+      <oa:pageLayout id="qarstblkupdRN" windowTitle="Quality Result Bulk Upload" title="Quality Results" amDefName="xxx.oracle.apps.qa.results.bulkenter.server.QA_RST_BLK_UPD_AM" appMenu="QA_TOP">
+         <ui:corporateBranding>
+            <oa:image id="corporateBrandingImage" source="/OA_MEDIA/FNDSSCORP.gif"/>
+         </ui:corporateBranding>
+         <ui:contents>
+            <oa:header id="qarstblkupdHDR" text="Bulk Upload">
+               <ui:contents>
+                  <oa:messageComponentLayout id="region1">
+                     <ui:contents>
+                        <oa:messageLovInput id="QualityPlanLOV" externalListOfValues="/xxx/oracle/apps/qa/results/bulkenter/webui/QualityPlanRN" prompt="Quality Plan">
+                           <lovMappings>
+                              <lovMap id="lovMap1" lovItem="item1" resultTo="QualityPlanLOV" criteriaFrom="QualityPlanLOV" requiredForLOV="false"/>
+                           </lovMappings>
+                        </oa:messageLovInput>
+                     </ui:contents>
+                  </oa:messageComponentLayout>
+                  <oa:pageButtonBar id="region4">
+                     <ui:contents>
+                        <oa:spacer id="spacer2" width="240"/>
+                        <oa:button id="downloadbtn" text="Download" prompt="Download" shortDesc="Download Template">
+                           <ui:primaryClientAction>
+                              <ui:firePartialAction event="FILE_DOWNLOAD"/>
+                           </ui:primaryClientAction>
+                        </oa:button>
+                     </ui:contents>
+                  </oa:pageButtonBar>
+                  <oa:messageComponentLayout id="region2" controllerClass="xxx.oracle.apps.qa.results.bulkenter.webui.XXCUST_QA_RST_BLK_UPD_CO">
+                     <ui:contents>
+                        <oa:messageFileUpload id="qualityfileupload" prompt="Quality Result Bulk Data"/>
+                     </ui:contents>
+                  </oa:messageComponentLayout>
+                  <oa:pageButtonBar id="region3">
+                     <ui:contents>
+                        <oa:spacer id="spacer1" width="240" height="10"/>
+                        <oa:button id="UPLOADBTN" text="Upload" prompt="Upload">
+                           <ui:primaryClientAction>
+                              <ui:firePartialAction event="FILE_UPLOAD" formSubmitted="false"/>
+                           </ui:primaryClientAction>
+                        </oa:button>
+                     </ui:contents>
+                  </oa:pageButtonBar>
+                  <oa:pageButtonBar id="region5">
+                     <ui:contents>
+                        <oa:button id="refreshbtn" text="Check Worker" prompt="Check Worker">
+                           <ui:primaryClientAction>
+                              <ui:firePartialAction event="CHECK_WORKER"/>
+                           </ui:primaryClientAction>
+                        </oa:button>
+                        <oa:button id="Errors" text="Errors" prompt="Errors">
+                           <ui:primaryClientAction>
+                              <ui:firePartialAction event="SHOW_ERRORS"/>
+                           </ui:primaryClientAction>
+                        </oa:button>
+                     </ui:contents>
+                  </oa:pageButtonBar>
+               </ui:contents>
+            </oa:header>
+         </ui:contents>
+      </oa:pageLayout>
+   </content>
+</page>
